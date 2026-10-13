@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yure Pinturas — Aprenda pintura profissional e ganhe dinheiro</title>
+<meta name="description" content="Cursos, e-books e packs para quem quer dominar a pintura profissional e transformar isso em renda. Pagamento por Pix ou cartão.">
+<link rel="icon" href="assets/icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1f38">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="13" height="7" rx="1.5"/><path d="M15 6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7v3"/><rect x="8" y="17" width="5" height="5" rx="1"/></svg>
+      </span>
+      <span data-store-name>Yure Pinturas</span>
+    </a>
+    <nav class="nav">
+      <a href="#produtos">Produtos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#duvidas">Dúvidas</a>
+      <a href="meus-produtos.html">Meus produtos</a>
+    </nav>
+    <button class="cart-btn" onclick="openCart()" aria-label="Abrir carrinho">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-label">Carrinho</span>
+      <span class="cart-count" style="display:none">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="pill">PRODUTOS DIGITAIS • ACESSO IMEDIATO</span>
+      <h1>Aprenda pintura profissional e transforme isso em renda</h1>
+      <p data-store-tagline>Cursos, e-books e ferramentas práticas para dominar a pintura e conquistar clientes.</p>
+      <a href="#produtos" class="btn btn-primary">Ver produtos</a>
+      <div class="hero-proof">
+        <div><strong>+500</strong><span>alunos e clientes</span></div>
+        <div><strong>4.9★</strong><span>avaliação média</span></div>
+        <div><strong>7 dias</strong><span>de garantia</span></div>
+      </div>
+    </div>
+    <div class="hero-card" id="hero-featured"></div>
+  </div>
+</section>
+
+<main class="container">
+  <section class="section" id="produtos">
+    <h2>Nossos produtos</h2>
+    <p class="sub">Escolha e receba o acesso na hora, direto no seu e-mail.</p>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="search" placeholder="Buscar curso, e-book, pack..." oninput="renderGrid()">
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div style="height:16px"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="section" id="como-funciona">
+    <h2>Como funciona</h2>
+    <p class="sub">Comprar e receber é simples e seguro.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Escolha seu produto</h3><p>Navegue pelo catálogo e adicione ao carrinho o curso, e-book ou pack ideal para você.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Pague com Pix ou cartão</h3><p>Pagamento processado com segurança pelo Mercado Pago, ou Pix direto com desconto.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Receba na hora</h3><p>Assim que o pagamento é confirmado, o acesso chega no seu e-mail e na página Meus Produtos.</p></div>
+    </div>
+    <div class="benefits" style="margin-top:16px">
+      <div class="benefit"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><h3>Acesso imediato</h3><p>Receba assim que pagar</p></div>
+      <div class="benefit"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h3>Compra segura</h3><p>Pix ou cartão protegido</p></div>
+      <div class="benefit"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg><h3>No seu celular</h3><p>Estude de onde estiver</p></div>
+      <div class="benefit"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><h3>7 dias de garantia</h3><p>Risco zero para você</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="depoimentos">
+    <h2>Quem já comprou, recomenda</h2>
+    <p class="sub">Avaliações de alunos e clientes.</p>
+    <div class="testis">
+      <div class="testi"><p>"Saí do zero e em um mês já estava fazendo meus primeiros serviços. O módulo de orçamento vale ouro."</p><footer><strong>Carlos M.</strong> — Curso Pintura Residencial</footer></div>
+      <div class="testi"><p>"O e-book me salvou numa obra: acertei as cores de primeira e a cliente amou. Recomendo demais."</p><footer><strong>Patrícia S.</strong> — E-book Pintura Perfeita</footer></div>
+      <div class="testi"><p>"As artes do pack deixaram meu Instagram profissional e a planilha calcula tudo sozinha. Fecho mais orçamentos agora."</p><footer><strong>João P.</strong> — Pack Pintor PRO</footer></div>
+    </div>
+  </section>
+
+  <section class="section faq" id="duvidas">
+    <h2>Dúvidas frequentes</h2>
+    <p class="sub">Tudo que você precisa saber antes de comprar.</p>
+    <details open><summary>Como recebo o produto depois de pagar?</summary><p>Produtos digitais são entregues por e-mail e ficam disponíveis na página "Meus Produtos". Pagamentos por Pix costumam ser confirmados em minutos; no cartão, conforme a aprovação da operadora.</p></details>
+    <details><summary>Quais são as formas de pagamento?</summary><p>Pix ou cartão de crédito pelo Mercado Pago, com total segurança. Também aceitamos Pix direto com 5% de desconto — nesse caso o acesso é liberado após a confirmação pelo WhatsApp.</p></details>
+    <details><summary>Posso assistir no celular?</summary><p>Sim! Todo o conteúdo funciona no celular, tablet ou computador, sem instalar nada.</p></details>
+    <details><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia incondicional. Se não ficar satisfeito, devolvemos 100% do seu dinheiro, sem perguntas.</p></details>
+    <details><summary>Preciso pagar mensalidade?</summary><p>Não. O pagamento é único e o acesso é seu para sempre, incluindo futuras atualizações.</p></details>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <h4 data-store-name>Yure Pinturas</h4>
+      <p data-store-tagline>Aprenda pintura profissional e transforme isso em renda.</p>
+    </div>
+    <div>
+      <h4>Loja</h4>
+      <a href="#produtos">Todos os produtos</a>
+      <a href="meus-produtos.html">Meus produtos</a>
+      <a href="checkout.html">Finalizar compra</a>
+    </div>
+    <div>
+      <h4>Ajuda</h4>
+      <a href="#duvidas">Dúvidas frequentes</a>
+      <a href="meus-produtos.html">Recuperar acesso</a>
+      <a href="#" id="footer-wa">Falar no WhatsApp</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">© 2026 <span data-store-name>Yure Pinturas</span> • Pagamento único • 7 dias de garantia</div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/store.js"></script>
+<script>
+let activeCat = "Todos";
+function categories() {
+  return ["Todos", ...new Set(getProducts().map((p) => p.category))];
+}
+function renderChips() {
+  document.getElementById("chips").innerHTML = categories().map((c) =>
+    `<button class="chip ${c === activeCat ? "active" : ""}" onclick="setCat('${c}')">${c}</button>`
+  ).join("");
+}
+function setCat(c) { activeCat = c; renderChips(); renderGrid(); }
+function cardHTML(p) {
+  const off = desconto(p);
+  return `<article class="card">
+    <a class="card-cover" href="produto.html?id=${p.id}">
+      <img src="${p.cover}" alt="${p.name}" loading="lazy">
+      ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
+    </a>
+    <div class="card-body">
+      <span class="card-cat">${p.category} • Produto digital</span>
+      <a class="card-title" href="produto.html?id=${p.id}">${p.name}</a>
+      <div class="stars">${starsHTML()}<span>${p.rating.toFixed(1)} (${p.reviews})</span></div>
+      <p class="card-desc">${p.short}</p>
+      <div class="card-foot">
+        <div><span class="old-price">${p.oldPrice > p.price ? money(p.oldPrice) : ""}</span>
+        <span class="price">${money(p.price)}</span></div>
+        ${off ? `<span class="badge off">-${off}%</span>` : ""}
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-outline btn-sm" onclick="addToCart('${p.id}')">Adicionar</button>
+        <a class="btn btn-primary btn-sm" href="produto.html?id=${p.id}">Ver mais</a>
+      </div>
+    </div>
+  </article>`;
+}
+function renderGrid() {
+  const q = (document.getElementById("search").value || "").toLowerCase();
+  const list = getProducts().filter((p) =>
+    (activeCat === "Todos" || p.category === activeCat) &&
+    (!q || (p.name + " " + p.short + " " + p.category).toLowerCase().includes(q))
+  );
+  document.getElementById("grid").innerHTML = list.length
+    ? list.map(cardHTML).join("")
+    : `<p class="small">Nenhum produto encontrado. Tente outro termo.</p>`;
+}
+function renderHero() {
+  const p = getProducts()[0];
+  if (!p) return;
+  document.getElementById("hero-featured").innerHTML = `
+    <img src="${p.cover}" alt="${p.name}">
+    <div class="row">
+      <div><div class="small"><strong>${p.name}</strong></div>
+      <span class="old-price">${p.oldPrice > p.price ? money(p.oldPrice) : ""}</span>
+      <span class="price" style="font-size:1.2rem">${money(p.price)}</span></div>
+      <a class="btn btn-green btn-sm" style="flex:none" href="produto.html?id=${p.id}">Quero este</a>
+    </div>`;
+}
+document.addEventListener("DOMContentLoaded", () => {
+  renderChips(); renderGrid(); renderHero();
+  document.getElementById("footer-wa").href = waLink("Olá! Preciso de ajuda com um produto da loja.");
+});
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
