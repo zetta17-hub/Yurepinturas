@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Produto — Yure Pinturas</title>
+<link rel="icon" href="assets/icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1f38">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="13" height="7" rx="1.5"/><path d="M15 6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7v3"/><rect x="8" y="17" width="5" height="5" rx="1"/></svg>
+      </span>
+      <span data-store-name>Yure Pinturas</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html#produtos">Produtos</a>
+      <a href="index.html#como-funciona">Como funciona</a>
+      <a href="index.html#duvidas">Dúvidas</a>
+      <a href="meus-produtos.html">Meus produtos</a>
+    </nav>
+    <button class="cart-btn" onclick="openCart()" aria-label="Abrir carrinho">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-label">Carrinho</span>
+      <span class="cart-count" style="display:none">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="container" id="content"></main>
+
+<section class="container section" id="related-wrap" style="display:none">
+  <h2>Você também pode gostar</h2>
+  <p class="sub">Complete seu aprendizado.</p>
+  <div class="grid" id="related"></div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><h4 data-store-name>Yure Pinturas</h4><p data-store-tagline></p></div>
+    <div><h4>Loja</h4><a href="index.html#produtos">Todos os produtos</a><a href="meus-produtos.html">Meus produtos</a><a href="checkout.html">Finalizar compra</a></div>
+    <div><h4>Ajuda</h4><a href="index.html#duvidas">Dúvidas frequentes</a><a href="meus-produtos.html">Recuperar acesso</a></div>
+  </div>
+  <div class="container footer-bottom">© 2026 <span data-store-name>Yure Pinturas</span> • Pagamento único • 7 dias de garantia</div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/store.js"></script>
+<script>
+const id = new URLSearchParams(location.search).get("id");
+const p = getProduct(id);
+if (!p) {
+  document.getElementById("content").innerHTML = `<div class="panel center" style="margin-top:24px">
+    <h2>Produto não encontrado</h2><p class="sub">Ele pode ter sido removido ou o link está incorreto.</p>
+    <a class="btn btn-primary" href="index.html">Voltar para a loja</a></div>`;
+} else {
+  document.title = p.name + " — " + getConfig().storeName;
+  const pixPrice = p.price * (1 - PIX_DESCONTO);
+  document.getElementById("content").innerHTML = `
+  <div class="prod-grid">
+    <div>
+      <div class="prod-cover"><img src="${p.cover}" alt="${p.name}"></div>
+      <div class="guarantee">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><strong>Garantia incondicional de 7 dias.</strong> Se não ficar satisfeito, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</div>
+      </div>
+    </div>
+    <div class="prod-info">
+      <span class="card-cat">${p.category} • Produto digital</span>
+      <h1>${p.name}</h1>
+      <div class="stars">${starsHTML()}<span><strong>${p.rating.toFixed(1)}</strong> • ${p.reviews} avaliações</span></div>
+      <p style="margin-top:10px;color:var(--muted)">${p.short}</p>
+      <div class="prod-price-box">
+        ${p.oldPrice > p.price ? `<span class="old-price">De ${money(p.oldPrice)} por apenas</span>` : ""}
+        <div class="price">${money(p.price)}</div>
+        <div class="pix-note">No Pix direto: ${money(pixPrice)} (5% OFF) — selecione no checkout</div>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-primary" style="flex:1;min-width:180px" onclick="comprarAgora('${p.id}')">Comprar agora</button>
+          <button class="btn btn-outline" style="flex:1;min-width:180px" onclick="addToCart('${p.id}')">Adicionar ao carrinho</button>
+        </div>
+        <p class="small center" style="margin-top:10px">Pagamento único • Acesso vitalício • Liberação por e-mail</p>
+      </div>
+      <h3>O que você vai receber</h3>
+      <ul class="includes">${p.includes.map((i) => `<li>${ICONS.check}<span>${i}</span></li>`).join("")}</ul>
+      <p class="small"><strong>Entrega:</strong> ${p.delivery}</p>
+    </div>
+  </div>
+  <div class="prod-desc"><h3>Sobre este produto</h3><p>${p.description}</p></div>`;
+
+  const rel = getProducts().filter((x) => x.id !== p.id).slice(0, 3);
+  if (rel.length) {
+    document.getElementById("related-wrap").style.display = "block";
+    document.getElementById("related").innerHTML = rel.map((r) => `
+      <article class="card">
+        <a class="card-cover" href="produto.html?id=${r.id}"><img src="${r.cover}" alt="${r.name}" loading="lazy"></a>
+        <div class="card-body">
+          <span class="card-cat">${r.category}</span>
+          <a class="card-title" href="produto.html?id=${r.id}">${r.name}</a>
+          <div class="card-foot"><div>
+            <span class="old-price">${r.oldPrice > r.price ? money(r.oldPrice) : ""}</span>
+            <span class="price">${money(r.price)}</span></div></div>
+          <div class="card-actions"><a class="btn btn-primary btn-sm" href="produto.html?id=${r.id}">Ver mais</a></div>
+        </div>
+      </article>`).join("");
+  }
+}
+function comprarAgora(id) {
+  const c = getCart();
+  if (!c.find((i) => i.id === id)) { c.push({ id, qty: 1 }); saveCart(c); }
+  location.href = "checkout.html";
+}
+</script>
+</body>
+</html>

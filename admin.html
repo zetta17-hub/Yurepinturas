@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Admin — Yure Pinturas</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="13" height="7" rx="1.5"/><path d="M15 6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7v3"/><rect x="8" y="17" width="5" height="5" rx="1"/></svg>
+      </span>
+      <span>Painel da Loja</span>
+    </a>
+    <nav class="nav"><a href="index.html">Ver loja</a></nav>
+  </div>
+</header>
+
+<main class="container section">
+  <h2>Painel da loja</h2>
+  <p class="sub">Altere dados da loja e produtos. Mudanças valem neste navegador; use "Baixar arquivos" para publicar de verdade.</p>
+
+  <div class="panel">
+    <h2>1. Dados da loja</h2>
+    <p class="sub">WhatsApp, Pix e backend do Mercado Pago.</p>
+    <div class="admin-grid">
+      <div class="field"><label>Nome da loja</label><input id="c-storeName"></div>
+      <div class="field"><label>Frase de efeito</label><input id="c-tagline"></div>
+      <div class="field"><label>WhatsApp (só dígitos, com DDI+DDD)</label><input id="c-whatsapp" placeholder="5586999999999"><div class="hint">Ex: 5586999999999</div></div>
+      <div class="field"><label>Chave Pix</label><input id="c-pixKey"></div>
+      <div class="field"><label>Nome no Pix</label><input id="c-pixName"></div>
+      <div class="field"><label>URL do backend (Mercado Pago)</label><input id="c-backendUrl" placeholder="https://sua-api.onrender.com"><div class="hint">Deixe vazio até publicar a pasta server/</div></div>
+    </div>
+    <button class="btn btn-primary mt" onclick="saveConfig()">Salvar dados</button>
+  </div>
+
+  <div class="panel">
+    <h2>2. Produtos</h2>
+    <p class="sub">Edite preço, descrição e o <strong>link de entrega</strong> (fileUrl) de cada produto.</p>
+    <div id="plist"></div>
+    <button class="btn btn-outline mt" onclick="addProduct()">+ Adicionar produto</button>
+    <button class="btn btn-primary mt" onclick="saveProducts()">Salvar produtos</button>
+  </div>
+
+  <div class="panel">
+    <h2>3. Publicar alterações</h2>
+    <p class="sub">O admin salva no navegador. Para valer para todos os clientes, baixe os arquivos e substitua no repositório (ou edite <code class="inline">js/products.js</code> e <code class="inline">js/config.js</code> direto no GitHub).</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="downloadConfig()">Baixar config.js</button>
+      <button class="btn btn-outline" onclick="downloadProducts()">Baixar products.js</button>
+      <button class="btn btn-outline" onclick="resetAll()">Apagar e voltar ao padrão</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>4. Pedidos via Pix feitos neste aparelho</h2>
+    <p class="sub">Pedidos manuais registrados neste navegador (o cliente também te chama no WhatsApp).</p>
+    <div id="orders"></div>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/store.js"></script>
+<script>
+let draft = JSON.parse(JSON.stringify(getProducts()));
+function loadCfg() {
+  const c = getConfig();
+  ["storeName","tagline","whatsapp","pixKey","pixName","backendUrl"].forEach((k) => {
+    document.getElementById("c-" + k).value = c[k] || "";
+  });
+}
+function saveConfig() {
+  const o = {};
+  ["storeName","tagline","whatsapp","pixKey","pixName","backendUrl"].forEach((k) => {
+    o[k] = document.getElementById("c-" + k).value.trim();
+  });
+  localStorage.setItem(LS_CFG, JSON.stringify(o));
+  toast("Dados salvos!"); loadCfg();
+}
+function renderProducts() {
+  document.getElementById("plist").innerHTML = draft.map((p, i) => `
+    <div class="admin-prod">
+      <h4>#${i + 1} — ${p.name || "(sem nome)"}</h4>
+      <div class="admin-grid">
+        <div class="field"><label>Nome</label><input data-i="${i}" data-k="name" value="${(p.name||"").replace(/"/g,'&quot;')}"></div>
+        <div class="field"><label>Categoria</label><input data-i="${i}" data-k="category" value="${(p.category||"").replace(/"/g,'&quot;')}"></div>
+        <div class="field"><label>Preço (ex: 97.00)</label><input data-i="${i}" data-k="price" value="${p.price}"></div>
+        <div class="field"><label>Preço antigo (ex: 197.00)</label><input data-i="${i}" data-k="oldPrice" value="${p.oldPrice}"></div>
+        <div class="field"><label>Selo (ex: OFERTA)</label><input data-i="${i}" data-k="badge" value="${(p.badge||"").replace(/"/g,'&quot;')}"></div>
+        <div class="field"><label>Imagem de capa (caminho ou URL)</label><input data-i="${i}" data-k="cover" value="${(p.cover||"").replace(/"/g,'&quot;')}"></div>
+        <div class="field"><label>Resumo curto</label><input data-i="${i}" data-k="short" value="${(p.short||"").replace(/"/g,'&quot;')}"></div>
+        <div class="field"><label>Link de entrega (Drive, Hotmart...)</label><input data-i="${i}" data-k="fileUrl" value="${(p.fileUrl||"").replace(/"/g,'&quot;')}" placeholder="https://..."></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Descrição</label><textarea data-i="${i}" data-k="description" rows="3">${p.description||""}</textarea></div>
+      <div class="field"><label>O que inclui (um item por linha)</label><textarea data-i="${i}" data-k="includes" rows="3">${(p.includes||[]).join("\n")}</textarea></div>
+      <button class="btn btn-outline btn-sm" style="color:#dc2626;border-color:#fecaca" onclick="delProduct(${i})">Excluir produto</button>
+    </div>`).join("");
+  document.querySelectorAll("#plist [data-i]").forEach((el) => {
+    el.addEventListener("input", () => {
+      const i = +el.dataset.i, k = el.dataset.k;
+      if (k === "price" || k === "oldPrice") draft[i][k] = parseFloat(el.value) || 0;
+      else if (k === "includes") draft[i][k] = el.value.split("\n").map((s) => s.trim()).filter(Boolean);
+      else draft[i][k] = el.value;
+    });
+  });
+}
+function addProduct() {
+  draft.push({ id: "produto-" + Date.now(), name: "Novo produto", category: "Cursos",
+    price: 47, oldPrice: 97, badge: "NOVO", cover: "assets/icon.png",
+    rating: 5.0, reviews: 0, short: "", description: "", includes: [], delivery: "Acesso por e-mail após o pagamento.", fileUrl: "" });
+  renderProducts(); toast("Produto adicionado (não esqueça de salvar)");
+}
+function delProduct(i) { if (confirm("Excluir este produto?")) { draft.splice(i, 1); renderProducts(); } }
+function saveProducts() {
+  localStorage.setItem(LS_PROD, JSON.stringify(draft));
+  toast("Produtos salvos!"); renderOrders();
+}
+function download(name, content) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([content], { type: "text/javascript" }));
+  a.download = name; a.click();
+}
+function downloadConfig() {
+  const c = getConfig();
+  download("config.js", `// Configurações da loja — gerado pelo admin em ${new Date().toLocaleString("pt-BR")}\nconst STORE_CONFIG = ${JSON.stringify(c, null, 2)};\n`);
+  toast("Baixado! Substitua o arquivo js/config.js no GitHub.");
+}
+function downloadProducts() {
+  download("products.js", `// Catálogo — gerado pelo admin em ${new Date().toLocaleString("pt-BR")}\nconst DEFAULT_PRODUCTS = ${JSON.stringify(draft, null, 2)};\n\nif (typeof module !== "undefined" && module.exports) {\n  module.exports = DEFAULT_PRODUCTS;\n}\n`);
+  toast("Baixado! Substitua o arquivo js/products.js no GitHub.");
+}
+function resetAll() {
+  if (!confirm("Apagar todas as alterações e voltar ao padrão?")) return;
+  localStorage.removeItem(LS_CFG); localStorage.removeItem(LS_PROD);
+  location.reload();
+}
+function renderOrders() {
+  const all = getOrders();
+  document.getElementById("orders").innerHTML = all.length ? all.map((o) => `
+    <div class="order-line"><div class="info"><strong>${o.code}</strong> — ${o.customer?.name || ""} (${o.customer?.email || ""})
+    <small>${(o.items||[]).map((i) => i.name).join(" • ")} — ${money(o.total)} • ${new Date(o.date).toLocaleString("pt-BR")}</small></div></div>`).join("")
+    : `<p class="small">Nenhum pedido manual registrado aqui ainda.</p>`;
+}
+document.addEventListener("DOMContentLoaded", () => { loadCfg(); renderProducts(); renderOrders(); });
+</script>
+</body>
+</html>

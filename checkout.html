@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Finalizar compra — Yure Pinturas</title>
+<link rel="icon" href="assets/icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f1f38">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="13" height="7" rx="1.5"/><path d="M15 6h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7v3"/><rect x="8" y="17" width="5" height="5" rx="1"/></svg>
+      </span>
+      <span data-store-name>Yure Pinturas</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html#produtos">Produtos</a>
+      <a href="meus-produtos.html">Meus produtos</a>
+    </nav>
+    <button class="cart-btn" onclick="openCart()" aria-label="Abrir carrinho">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-label">Carrinho</span>
+      <span class="cart-count" style="display:none">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <div id="empty" style="display:none">
+    <div class="panel center" style="margin-top:24px">
+      <h2>Seu carrinho está vazio</h2>
+      <p class="sub">Adicione um produto antes de finalizar a compra.</p>
+      <a class="btn btn-primary" href="index.html#produtos">Ver produtos</a>
+    </div>
+  </div>
+
+  <div class="check-grid" id="checkgrid" style="display:none">
+    <div>
+      <div class="panel">
+        <h2>1. Seus dados</h2>
+        <p class="sub">O acesso ao produto será enviado para este e-mail.</p>
+        <div class="field" id="f-name"><label for="name">Nome completo</label>
+          <input id="name" placeholder="Seu nome" autocomplete="name"><div class="err">Informe seu nome.</div></div>
+        <div class="field" id="f-email"><label for="email">E-mail (para receber o produto)</label>
+          <input id="email" type="email" placeholder="voce@email.com" autocomplete="email"><div class="err">Informe um e-mail válido.</div></div>
+        <div class="field" id="f-phone"><label for="phone">WhatsApp (com DDD)</label>
+          <input id="phone" inputmode="tel" placeholder="(86) 99999-9999" autocomplete="tel"><div class="err">Informe seu WhatsApp.</div></div>
+      </div>
+
+      <div class="panel">
+        <h2>2. Pagamento</h2>
+        <p class="sub">Escolha a forma de pagamento.</p>
+        <div class="pay-tabs">
+          <button class="pay-tab active" id="tab-mp" onclick="setPay('mp')">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+            <span>Mercado Pago<small>Pix ou cartão • liberação automática</small></span>
+          </button>
+          <button class="pay-tab" id="tab-pix" onclick="setPay('pix')">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span>Pix direto (-5%)<small>Confirmação pelo WhatsApp</small></span>
+          </button>
+        </div>
+
+        <div class="pay-panel active" id="panel-mp">
+          <div id="mp-ready">
+            <p class="small" style="margin-bottom:12px">Você será levado ao ambiente seguro do Mercado Pago para pagar com Pix ou cartão. O acesso é liberado automaticamente após a confirmação.</p>
+            <button class="btn btn-primary btn-block" id="btn-mp" onclick="pagarMP()">Pagar com Mercado Pago</button>
+          </div>
+          <div id="mp-setup" style="display:none">
+            <div class="alert warn"><strong>Pagamento online em configuração.</strong><br>Enquanto isso, finalize com <strong>Pix direto</strong> ou chame no WhatsApp — é rápido e seguro.</div>
+            <button class="btn btn-green btn-block" onclick="setPay('pix')">Usar Pix direto com 5% OFF</button>
+          </div>
+        </div>
+
+        <div class="pay-panel" id="panel-pix">
+          <div class="pix-box">
+            <strong>Chave Pix (<span id="pix-name"></span>)</strong>
+            <div class="pix-key">
+              <input id="pix-key" readonly value="">
+              <button class="copy-btn" onclick="copiarPix()">Copiar</button>
+            </div>
+            <p class="small">1. Copie a chave e pague <strong id="pix-total"></strong> no app do seu banco.<br>
+            2. Clique em "Já fiz o Pix" para avisar e receber seu acesso.</p>
+          </div>
+          <div style="height:12px"></div>
+          <button class="btn btn-green btn-block" onclick="pagarPix()">Já fiz o Pix — receber meu acesso</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h2>Seu pedido</h2>
+        <p class="sub">Revise antes de pagar.</p>
+        <div id="summary"></div>
+        <div class="divider"></div>
+        <div class="total-row"><span>Total</span><span id="grand"></span></div>
+        <div class="alert ok" style="margin:12px 0 0">Garantia de 7 dias: risco zero.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-bottom">© 2026 <span data-store-name>Yure Pinturas</span> • Compra 100% segura</div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/store.js"></script>
+<script>
+let payMethod = "mp";
+function setPay(m) {
+  payMethod = m;
+  document.getElementById("tab-mp").classList.toggle("active", m === "mp");
+  document.getElementById("tab-pix").classList.toggle("active", m === "pix");
+  document.getElementById("panel-mp").classList.toggle("active", m === "mp");
+  document.getElementById("panel-pix").classList.toggle("active", m === "pix");
+}
+function validCustomer() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  let ok = true;
+  document.getElementById("f-name").classList.toggle("invalid", !name); if (!name) ok = false;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  document.getElementById("f-email").classList.toggle("invalid", !emailOk); if (!emailOk) ok = false;
+  const phoneOk = phone.replace(/\D/g, "").length >= 10;
+  document.getElementById("f-phone").classList.toggle("invalid", !phoneOk); if (!phoneOk) ok = false;
+  if (!ok) { toast("Confira seus dados antes de continuar"); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  return ok ? { name, email, phone } : null;
+}
+async function pagarMP() {
+  const customer = validCustomer();
+  if (!customer) return;
+  const cfg = getConfig();
+  if (!cfg.backendUrl) { // mostra instruções (não deveria acontecer, pois mp-setup cobre)
+    document.getElementById("mp-ready").style.display = "none";
+    document.getElementById("mp-setup").style.display = "block";
+    return;
+  }
+  const btn = document.getElementById("btn-mp");
+  btn.disabled = true; btn.textContent = "Gerando pagamento seguro...";
+  try {
+    const r = await pagarComMercadoPago(customer);
+    if (r.error === "no-backend") throw new Error("backend");
+    saveCart([]); // limpa carrinho antes de sair para o MP
+    location.href = r.init_point;
+  } catch (e) {
+    btn.disabled = false; btn.textContent = "Pagar com Mercado Pago";
+    toast("Não foi possível gerar o pagamento. Tente o Pix direto.");
+  }
+}
+function pagarPix() {
+  const customer = validCustomer();
+  if (!customer) return;
+  const cfg = getConfig();
+  const cart = getCart();
+  const total = cartTotal() * (1 - PIX_DESCONTO);
+  const code = newOrderCode();
+  const items = cart.map((i) => getProduct(i.id)).filter(Boolean);
+  saveOrder({ code, customer, items: items.map((p) => ({ id: p.id, name: p.name, price: p.price })), total, method: "pix-manual", date: new Date().toISOString() });
+  saveCart([]);
+  const msg = `Olá! Sou ${customer.name}. Pedido ${code} na ${cfg.storeName}:\n` +
+    items.map((p) => `• ${p.name} — ${money(p.price)}`).join("\n") +
+    `\nTotal no Pix: ${money(total)}\nJá fiz o pagamento para a chave ${cfg.pixKey}. Meu e-mail: ${customer.email}`;
+  location.href = waLink(msg);
+}
+function copiarPix() {
+  const el = document.getElementById("pix-key");
+  el.select(); el.setSelectionRange(0, 99999);
+  navigator.clipboard?.writeText(el.value).then(() => toast("Chave Pix copiada!")).catch(() => document.execCommand("copy"));
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = getCart();
+  if (!cart.length) { document.getElementById("empty").style.display = "block"; return; }
+  document.getElementById("checkgrid").style.display = "grid";
+  const cfg = getConfig();
+  if (!cfg.backendUrl) {
+    document.getElementById("mp-ready").style.display = "none";
+    document.getElementById("mp-setup").style.display = "block";
+  }
+  document.getElementById("pix-key").value = cfg.pixKey;
+  document.getElementById("pix-name").textContent = cfg.pixName;
+  document.getElementById("pix-total").textContent = money(cartTotal() * (1 - PIX_DESCONTO));
+  document.getElementById("summary").innerHTML = cart.map((i) => {
+    const p = getProduct(i.id); if (!p) return "";
+    return `<div class="order-line"><img src="${p.cover}" alt="">
+      <div class="info"><strong>${p.name}</strong><small>Produto digital • acesso por e-mail</small></div>
+      <strong>${money(p.price)}</strong></div>`;
+  }).join("");
+  document.getElementById("grand").textContent = money(cartTotal());
+});
+</script>
+</body>
+</html>
